@@ -35,7 +35,11 @@
 			$row = $result->fetch_array();								//Considero la riga della sessione successiva e il suo ID
 			$ID_finesessione = $row['ID'];
 			$ID_numcampioni = $ID_finesessione-$ID_iniziosessione;		//Per valutare il numero di campioni
-			$im = @imagecreate($ID_numcampioni, 400)					//Si crea un'immagine la cui larghezza corrisponde al numero di campioni
+			$sql = "SELECT MAX(`GSR`) AS MaxH FROM `".$table."` WHERE `ID` > ".$ID_iniziosessione." AND `ID` < ".$ID_finesessione;
+			$result = $connessione->query($sql);
+			$row = $result->fetch_array();
+			$MaxH = $row['MaxH']+50;
+			$im = @imagecreate($ID_numcampioni*3, $MaxH)					//Si crea un'immagine la cui larghezza corrisponde al numero di campioni
 				or die("Cannot Initialize new GD image stream");
 			$color_fondo = imagecolorallocate($im, 255, 255, 255);
 			$azzurro = imagecolorallocate($im, 0, 102, 204);	
@@ -44,21 +48,25 @@
 			$result = $connessione->query($sql);
 			for($i=0;$row = $result->fetch_array();$i++)				//Avvio un ciclo finché la fetch_array restituisce una riga (lettura)
 			{
-				imagesetpixel($im,$i,400-$row['GSR'],$azzurro);			//Per ogni lettura (GSR) si stampa un pixel all'altezza relativa, ciò viene fatto per ogni campione di tempo
+				imagesetpixel($im,$i*3,$MaxH-$row['GSR'],$azzurro);			//Per ogni lettura (GSR) si stampa un pixel all'altezza relativa, ciò viene fatto per ogni campione di tempo
 			}
 		}
 		else															//Se la sessione che si vuole visualizzare è l'ultima sessione disponibile
 		{
+			$sql = "SELECT MAX(`GSR`) AS MaxH FROM `".$table."` WHERE `ID` > ".$ID_iniziosessione;
+			$result = $connessione->query($sql);
+			$row = $result->fetch_array();
+			$MaxH = $row['MaxH']+50;
 			$sql = "SELECT `GSR` FROM `".$table."` WHERE `ID` > ".$ID_iniziosessione; //Nella tabella seleziono i valori GSR dall'inizio alla fine della sessione
 			$result = $connessione->query($sql);
 			$ID_numcampioni = $result->num_rows;						//Si calcola diversamente il numero di campioni ossia il numero di righe della query sopra
-			$im = @imagecreate($ID_numcampioni, 400)
+			$im = @imagecreate($ID_numcampioni*3, $MaxH)
 				or die("Cannot Initialize new GD image stream");
 			$color_fondo = imagecolorallocate($im, 255, 255, 255);
 			$azzurro = imagecolorallocate($im, 0, 102, 204);
 			for($i=0;$row = $result->fetch_array();$i++)
 			{
-				imagesetpixel($im,$i,400-$row['GSR'],$azzurro);
+				imagesetpixel($im,$i*3,$MaxH-$row['GSR'],$azzurro);
 			}			
 		}
 	}

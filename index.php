@@ -6,9 +6,9 @@
 
  if(isset($_GET['data']))
  {
-    $data = $_GET['data']; 
+    $data = $_GET['data'];
  }
-   
+
 
 
 
@@ -36,7 +36,7 @@
 
   <body>
     <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
-      <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="">Company name <?php echo (creaVettore(str_replace("/","",$data),0)+0.000000031709792);?></a>
+      <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="">Company name </a>
     </nav>
 
     <div class="container-fluid">
@@ -76,7 +76,7 @@
 																			}
 																		?>'"
           ><b>&#8249;</b></button>
-          
+
 				  <button class="btn btn-sm btn-outline-secondary" onclick="location.href = '<?php
                                       echo "?";
                                       $numSess = numeroSessione(str_replace('/','',$data));
@@ -85,7 +85,7 @@
 																			{
 																				echo "data=".  $_GET['data']. "&";
                                       }
-                                      //Creare IF per il caso in cui numSess = -1     
+                                      //Creare IF per il caso in cui numSess = -1
 																			if(isset($_GET['session']))
 																			{
 																				if($_GET['session']==$numSess-1)
@@ -104,11 +104,11 @@
                                           echo "session=0";
                                         }
                                         else {echo "sessione=1";}
-																			
+
 																			}
 																		?>'"><b>&#8250;</b></button>
               </div>
-                      
+
                             <input type="text" id="datepicker"/>
             </div>
           </div>
@@ -162,19 +162,21 @@
       var myChart = new Chart(ctx, {
         type: 'line',
         data: {
-          labels: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+          <?php $vettore = creaVettore(str_replace("/","",$data),1);?>
+          labels: <?php echo $vettore[0]; ?>,
           datasets: [{
-            data: [15339, 21345, 18483, 24003, 23489, 24092, 252222],
+            data: <?php echo $vettore[1]; ?>,
+
             lineTension: 0,
             backgroundColor: 'transparent',
             borderColor: '#007bff',
             borderWidth: 3,
             pointBackgroundColor: '#007bff',
             pointRadius: 0
-            
+
           }]
         },
-        
+
         options: {
           scales: {
             yAxes: [{
@@ -199,9 +201,9 @@
 			$("#datepicker").datepicker();
 
 			<?php
-			
+
 					echo "$(\"#datepicker\").datepicker(\"setDate\",\"" . $data . "\"); \n";
-			
+
 			?>
 		});
 		function cambiadata( dateText){

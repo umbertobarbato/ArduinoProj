@@ -251,6 +251,7 @@
 					$row = $result->fetch_array();
 				}
 				$ID_iniziosessione = $row['ID'];
+
 				if($sessione < ($result->num_rows-1))
 				{
 					$row = $result->fetch_array();
@@ -316,6 +317,7 @@
 				}
 				else
 				{
+				
 					$sql = "SELECT COUNT(*) FROM `".$table."` WHERE `ID` > ".$ID_iniziosessione;
 					$result = $connessione->query($sql);
 					$ID_numcampioni = mysqli_fetch_row($result)[0];

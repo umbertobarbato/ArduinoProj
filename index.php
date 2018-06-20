@@ -8,6 +8,11 @@
  {
     $data = $_GET['data'];
  }
+ $sessione = 0;
+ if(isset($_GET['session']))
+ {
+    $sessione = $_GET['session'];
+ }
 
 
 
@@ -162,7 +167,7 @@
       var myChart = new Chart(ctx, {
         type: 'line',
         data: {
-          <?php $vettore = creaVettore(str_replace("/","",$data),1);?>
+          <?php $vettore = creaVettore(str_replace("/","",$data),$sessione);?>
           labels: <?php echo $vettore[0]; ?>,
           datasets: [{
             data: <?php echo $vettore[1]; ?>,

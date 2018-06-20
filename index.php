@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!-- saved from url=(0054)https://getbootstrap.com/docs/4.1/examples/dashboard/# -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    
+
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -10,14 +10,14 @@
     <title>Dashboard Template for Bootstrap</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="./Dashboard Template for Bootstrap_files/bootstrap.min.css" rel="stylesheet">
-    <link href="./Dashboard Template for Bootstrap_files/new-Style.css" rel="stylesheet">
+    <link href="./bootstrap.min.css" rel="stylesheet">
+    <link href="./new-Style.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="./Dashboard Template for Bootstrap_files/dashboard.css" rel="stylesheet">
+    <link href="./dashboard.css" rel="stylesheet">
   <style type="text/css">/* Chart.js */
 @-webkit-keyframes chartjs-render-animation{from{opacity:0.99}to{opacity:1}}@keyframes chartjs-render-animation{from{opacity:0.99}to{opacity:1}}.chartjs-render-monitor{-webkit-animation:chartjs-render-animation 0.001s;animation:chartjs-render-animation 0.001s;}</style>
-  
+
   </head>
 
   <body>
@@ -27,7 +27,7 @@
 
     <div class="container-fluid">
       <div class="row">
-   
+
 
         <main role="main" class="main-yd">
          <div class="chartjs-size-monitor" style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;">
@@ -64,13 +64,13 @@
 				  ><b>&#8249;</b></button>
 				  <button class="btn btn-sm btn-outline-secondary"><b>&#8250;</b></button>
               </div>
-			  
+
                             <input type="text" id="datepicker"/>
             </div>
           </div>
 
           <canvas class="my-4 w-100 chartjs-render-monitor" id="myChart" width="1004" height="423" style="display: block; width: 1004px; height: 423px;"></canvas>
-          
+
 		  <!--Titolo tabella-->
           <h2>Sommario eventi</h2>
           <div class="table-responsive">
@@ -85,9 +85,9 @@
                 <tr>
                   <td style="width:15%">1,001</td>
                   <td>Lorem</td>
-                  
+
                 </tr>
-                
+
                 <!--Inserire codice php per la generazione della tabella -->
               </tbody>
             </table>
@@ -99,19 +99,19 @@
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="./Dashboard Template for Bootstrap_files/jquery-3.3.1.slim.min.js.download" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="./jquery-3.3.1.slim.min.js.download" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
-    <script src="./Dashboard Template for Bootstrap_files/popper.min.js.download"></script>
-    <script src="./Dashboard Template for Bootstrap_files/bootstrap.min.js.download"></script>
+    <script src="./popper.min.js.download"></script>
+    <script src="./bootstrap.min.js.download"></script>
 
     <!-- Icons -->
-    <script src="./Dashboard Template for Bootstrap_files/feather.min.js.download"></script>
+    <script src="./feather.min.js.download"></script>
     <script>
       feather.replace()
     </script>
 
     <!-- Graphs -->
-    <script src="./Dashboard Template for Bootstrap_files/Chart.min.js.download"></script>
+    <script src="./Chart.min.js.download"></script>
     <script>
       var ctx = document.getElementById("myChart");
       var myChart = new Chart(ctx, {
@@ -144,21 +144,21 @@
   	<link rel="stylesheet" href="./jquery-ui-1.12.1.custom/jquery-ui-1.12.1.custom/jquery-ui.css"/>
 
 	<script type="text/javascript" src="./jquery-ui-1.12.1.custom/jquery-ui-1.12.1.custom/external/jquery/jquery.js"></script>
-	
+
 	<script type="text/javascript" src="./jquery-ui-1.12.1.custom/jquery-ui-1.12.1.custom/jquery-ui.js"></script>
   	<script type="text/javascript">
 		$("document").ready(function(){
 			$("#datepicker").datepicker();
-			
+
 			<?php
 				if(!isset($_GET['data']))
 				{
 					echo "$(\"#datepicker\").datepicker(\"setDate\",\"" . date("m/d/Y") . "\"); \n";
 				}else{
 					echo "$(\"#datepicker\").datepicker(\"setDate\",\"" . $_GET['data'] . "\"); \n";
-			
+
 				}
-					
+
 			?>
 		});
 		function cambiadata( dateText){
@@ -170,8 +170,8 @@
 		$("#datepicker").datepicker({
 			onClose: cambiadata
 		});
-	
+
 	</script>
-  
+
 
 </body></html>

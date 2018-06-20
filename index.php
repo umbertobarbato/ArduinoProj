@@ -43,7 +43,7 @@
             <div class="btn-toolbar mb-2 mb-md-0">
               <div class="btn-group mr-2">
 				  <button class="btn btn-sm btn-outline-secondary" onclick="location.href = '<?php
-																			echo "/?";
+																			echo "?";
 																			error_reporting(E_ERROR | E_PARSE);
 																			if(isset($_GET['data']))
 																			{
@@ -164,7 +164,7 @@
 		function cambiadata( dateText){
 			if(dateText!="")//FARE CONFRONTO CON DATA!
 			{
-				location.href = '/?data=' + dateText ;
+				location.href = '?data=' + dateText ;
 			}
 		};
 		$("#datepicker").datepicker({

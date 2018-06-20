@@ -1,5 +1,19 @@
 <!DOCTYPE html>
 <!-- saved from url=(0054)https://getbootstrap.com/docs/4.1/examples/dashboard/# -->
+<?php
+ include ('functions.php');
+ $data = date("m/d/Y");
+
+ if(isset($_GET['data']))
+ {
+    $data = $_GET['data']; 
+ }
+   
+
+
+
+ ?>
+
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -22,7 +36,7 @@
 
   <body>
     <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
-      <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="">Company name</a>
+      <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="">Company name <?php echo (creaVettore(str_replace("/","",$data),0)+0.000000031709792);?></a>
     </nav>
 
     <div class="container-fluid">
@@ -61,13 +75,44 @@
 																				echo "session=0";
 																			}
 																		?>'"
-				  ><b>&#8249;</b></button>
-				  <button class="btn btn-sm btn-outline-secondary"><b>&#8250;</b></button>
-              </div>
+          ><b>&#8249;</b></button>
+          
+				  <button class="btn btn-sm btn-outline-secondary" onclick="location.href = '<?php
+                                      echo "?";
+                                      $numSess = numeroSessione(str_replace('/','',$data));
 
+																			if(isset($_GET['data']))
+																			{
+																				echo "data=".  $_GET['data']. "&";
+                                      }
+                                      //Creare IF per il caso in cui numSess = -1     
+																			if(isset($_GET['session']))
+																			{
+																				if($_GET['session']==$numSess-1)
+																				{
+																					echo "session=".($numSess-1);
+                                        }
+                                        else
+                                        {
+																					echo "session=".($_GET['session']+1);
+																				}
+                                      }
+                                      else
+                                      {
+                                        if($numSess==1)
+                                        {
+                                          echo "session=0";
+                                        }
+                                        else {echo "sessione=1";}
+																			
+																			}
+																		?>'"><b>&#8250;</b></button>
+              </div>
+                      
                             <input type="text" id="datepicker"/>
             </div>
           </div>
+
 
           <canvas class="my-4 w-100 chartjs-render-monitor" id="myChart" width="1004" height="423" style="display: block; width: 1004px; height: 423px;"></canvas>
 
@@ -119,14 +164,17 @@
         data: {
           labels: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
           datasets: [{
-            data: [15339, 21345, 18483, 24003, 23489, 24092, 12034,25],
+            data: [15339, 21345, 18483, 24003, 23489, 24092, 252222],
             lineTension: 0,
             backgroundColor: 'transparent',
             borderColor: '#007bff',
-            borderWidth: 4,
-            pointBackgroundColor: '#007bff'
+            borderWidth: 3,
+            pointBackgroundColor: '#007bff',
+            pointRadius: 0
+            
           }]
         },
+        
         options: {
           scales: {
             yAxes: [{
@@ -151,14 +199,9 @@
 			$("#datepicker").datepicker();
 
 			<?php
-				if(!isset($_GET['data']))
-				{
-					echo "$(\"#datepicker\").datepicker(\"setDate\",\"" . date("m/d/Y") . "\"); \n";
-				}else{
-					echo "$(\"#datepicker\").datepicker(\"setDate\",\"" . $_GET['data'] . "\"); \n";
-
-				}
-
+			
+					echo "$(\"#datepicker\").datepicker(\"setDate\",\"" . $data . "\"); \n";
+			
 			?>
 		});
 		function cambiadata( dateText){

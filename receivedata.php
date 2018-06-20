@@ -15,7 +15,7 @@
 	
 	$timestamp = strtotime($_GET['time']);			//Dalla stringa ottengo l'oggetto Data
 	
-	$timedata = date('dmY',$timestamp); 			//Ottengo la data(Giorno-Mese-Anno) per la creazione della tabella
+	$timedata = date('mdY',$timestamp); 			//Ottengo la data(Giorno-Mese-Anno) per la creazione della tabella
 	$timestamp  = date('Y-m-d H:i:s',$timestamp);	//Ottengo il timestamp per identificare la sessione e per soddisfare il formato richiesto da Mysql
 	$table = "gsr_" + $timedata;					//Definisco il nome della tabella
 	

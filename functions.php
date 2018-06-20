@@ -180,4 +180,173 @@
 		}
 		$connessione->close();
 	}
-?>
+
+	function numeroSessione($data)
+	{
+		$host = "localhost";
+		$user = "root";
+		$password = "";
+		$db = "gsr";
+		
+		error_reporting(E_ERROR | E_PARSE);
+		$table = "gsr_"+$data;
+		
+		$connessione = new mysqli($host, $user, $password,$db);
+		
+		if ($connessione->connect_errno) 
+		{
+			echo "Connessione fallita: ". $connessione->connect_error . ".";
+			exit();
+		}
+		$sql = "SHOW TABLES LIKE '".$table."'"; 
+		$result = $connessione->query($sql);			
+		
+		if ($result->num_rows > 0)						
+		{
+			$sql = "SELECT COUNT(*) FROM `".$table."` WHERE `time` IS NOT NULL";
+			$result = mysqli_fetch_row($connessione->query($sql))[0];
+			
+		}
+		else 
+		{
+			$result = -1;
+		}
+		$connessione->close();
+		return $result; 
+	}
+
+	function creaVettore($data, $sessione)
+	{
+		
+		$host = "localhost";
+		$user = "root";
+		$password = "";
+		$db = "gsr";
+		
+		error_reporting(E_ERROR | E_PARSE);
+		$table = "gsr_"+$data;
+		
+		$connessione = new mysqli($host, $user, $password,$db);
+		
+		if ($connessione->connect_errno) 
+		{
+			echo "Connessione fallita: ". $connessione->connect_error . ".";
+			exit();
+		}
+		$sql = "SHOW TABLES LIKE '".$table."'"; 
+		$result = $connessione->query($sql);			
+		
+		if ($result->num_rows > 0)						
+		{
+			$sql = "SELECT `ID` FROM `".$table."` WHERE `time` IS NOT NULL";	
+	
+			$result = $connessione->query($sql);
+			
+			if ($result->num_rows > 0) 
+			{
+				$row = NULL;
+				for($i=0;$i<=$sessione;$i++)									
+																				
+				{
+					$row = $result->fetch_array();						
+				}
+				$ID_iniziosessione = $row['ID'];								
+				if($sessione < ($result->num_rows-1))						
+				{
+					$row = $result->fetch_array();								
+					$ID_finesessione = $row['ID'];
+					$ID_numcampioni = $ID_finesessione-$ID_iniziosessione;		
+					$durata_sessione_ms = (int)($ID_numcampioni*100);					
+					$durata_sessione_s = (int)($durata_sessione_ms/1000)-3600;	
+					$sql = "SELECT `time` FROM `".$table."` WHERE `ID`=" .$ID_iniziosessione;
+					$orainizio = mysqli_fetch_row($connessione->query($sql))[0];
+					return $orainizio;
+					$durata_sessione = date("H:i:s",$durata_sessione_s);
+					$tempi = "[\""; 
+					for($i=0; $i<$ID_numcampioni; $i++)
+					{	
+						switch ($i) 
+						{
+							case 0:
+								$tempi = $tempi .$orainizio. "\", \"" ;
+								break;
+							case ($ID_numcampioni/5):
+								$tempo;
+								$tempi = $tempi .$tempo. "\", \"" ;
+								break;
+							case ($ID_numcampioni*2/5):
+								$tempo;
+								$tempi = $tempi .$tempo. "\", \"" ;
+								break;
+							case ($ID_numcampioni*3/5):
+								$tempo;
+								$tempi = $tempi .$tempo. "\", \"" ;
+								break;
+							case ($ID_numcampioni*4/5):
+								$tempo;
+								$tempi = $tempi .$tempo. "\", \"" ;
+								break;	
+							case $ID_numcampioni:
+								$tempo;
+								$tempi = $tempi . $tempo . "\"]";
+								break;
+							default:
+								$tempo;
+								$tempi = $tempi . $tempo . "\"]";
+								break;
+						}
+
+
+
+					} 
+
+					
+				}	
+				else
+				{
+					$sql = "SELECT COUNT(*) FROM `".$table."` WHERE `ID` > ".$ID_iniziosessione;	
+					$result = $connessione->query($sql);
+					$ID_numcampioni = mysqli_fetch_row($result);							
+					$durata_sessione_ms = (int)($ID_numcampioni[0]*100);					
+					$durata_sessione_s = (int)($durata_sessione_ms/1000)-3600;		
+					
+					$durata_sessione = date("H:i:s",$durata_sessione_s);			
+					
+					$str = "Nella sessione selezionata hai guidato per ".$durata_sessione;
+					$sql = "SELECT AVG(`diff_event`) AS diff_media FROM `".$table."` WHERE `diff_event` IS NOT NULL AND `ID` > ".$ID_iniziosessione;
+					$result = $connessione->query($sql);
+					if ($result->num_rows > 0) 
+					{
+						$row = $result->fetch_array();
+						$media = $row['diff_media'];
+						if($media>60 || $media<-60)									
+						{
+							$str = $str." e sei stato stressato.";
+							return $str;
+						}
+						else
+						{
+							$str = $str." e sei stato rilassato.";
+							return $str;
+						}
+					} 
+					else
+					{
+						$str = $str." e sei stato rilassato.";			
+						return $str;
+					}
+				}
+			}
+		}
+		else
+		{
+			$str = "Per la sessione selezionata non è stato registrato alcun dato.";	
+			return $str;
+		}
+		$connessione->close();
+	
+
+	}
+
+	?>
+

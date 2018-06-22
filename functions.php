@@ -108,12 +108,12 @@
 					$row = $result->fetch_array();								//Considero la riga della sessione successiva e il suo ID
 					$ID_finesessione = $row['ID'];
 					$ID_numcampioni = $ID_finesessione-$ID_iniziosessione;		//Per valutare il numero di campioni
-					$durata_sessione_ms = (int)($ID_numcampioni*100);					//Calcolo il tempo di guida dell'intera giornata in ms
-					$durata_sessione_s = (int)($durata_sessione_ms/1000)-3600;		//Passo il tempo in secondi
-
-					$durata_sessione = date("H:i:s",$durata_sessione_s);			//Ottengo una stringa formattata in Ora:Minuti:Secondi
-
-					$str = "Nella sessione selezionata hai guidato per ".$durata_sessione;
+					$sql = "SELECT UNIX_TIMESTAMP(`time`) FROM `".$table."` WHERE `ID`=" .$ID_iniziosessione;
+					$orainizio = mysqli_fetch_row($connessione->query($sql))[0];
+					$durata_sessione_s = (int)($ID_numcampioni*0.1);		//Passo il tempo in secondi
+					$orafine = $orainizio+$durata_sessione_s;
+					$str[0] = date("H:i:s",$orainizio). " - " .date("H:i:s",$orafine);
+					
 					$sql = "SELECT AVG(`diff_event`) AS diff_media FROM `".$table."` WHERE `diff_event` IS NOT NULL AND (`ID` > ".$ID_iniziosessione." AND `ID` < ".$ID_finesessione.")";
 					$result = $connessione->query($sql);
 					if ($result->num_rows > 0)
@@ -122,18 +122,18 @@
 						$media = $row['diff_media'];
 						if($media>60 || $media<-60)									//In base al valore assunto dalla media si stabilisce l'eventuale livello di stress
 						{
-							$str = $str." e sei stato stressato.";
+							$str[1] = "Sei stato mediamente stressato.";
 							return $str;
 						}
 						else
 						{
-							$str = $str." e sei stato rilassato.";
+							$str[1] = "Sei stato mediamente calmo.";
 							return $str;
 						}
 					}
 					else
 					{
-						$str = $str." e sei stato rilassato.";			//Se non ci sono diff_event
+						$str[1] = "Sei stato mediamente calmo.";			//Se non ci sono diff_event
 						return $str;
 					}
 				}
@@ -142,12 +142,14 @@
 					$sql = "SELECT COUNT(*) FROM `".$table."` WHERE `ID` > ".$ID_iniziosessione;	//Ottengo il numero di campioni della sessione
 					$result = $connessione->query($sql);
 					$ID_numcampioni = mysqli_fetch_row($result);							//Il primo attributo dell'oggetto result è il numero di campioni della sessione
-					$durata_sessione_ms = (int)($ID_numcampioni[0]*100);					//Calcolo il tempo di guida dell'intera sessione in ms
-					$durata_sessione_s = (int)($durata_sessione_ms/1000)-3600;		//Passo il tempo in secondi
+					$sql = "SELECT UNIX_TIMESTAMP(`time`) FROM `".$table."` WHERE `ID`=" .$ID_iniziosessione;
+					$orainizio = mysqli_fetch_row($connessione->query($sql))[0];
+					
+					$durata_sessione_s = (int)($ID_numcampioni[0]*0.1);		//Passo il tempo in secondi
 
-					$durata_sessione = date("H:i:s",$durata_sessione_s);			//Ottengo una stringa formattata in Ora:Minuti:Secondi
-
-					$str = "Nella sessione selezionata hai guidato per ".$durata_sessione;
+					$orafine = $orainizio+$durata_sessione_s;
+					
+					$str[0] = date("H:i:s",$orainizio). " - " .date("H:i:s",$orafine);
 					$sql = "SELECT AVG(`diff_event`) AS diff_media FROM `".$table."` WHERE `diff_event` IS NOT NULL AND `ID` > ".$ID_iniziosessione;
 					$result = $connessione->query($sql);
 					if ($result->num_rows > 0)
@@ -156,18 +158,18 @@
 						$media = $row['diff_media'];
 						if($media>60 || $media<-60)									//In base al valore assunto dalla media si stabilisce l'eventuale livello di stress
 						{
-							$str = $str." e sei stato stressato.";
+							$str[1] = "Sei stato mediamente stressato.";
 							return $str;
 						}
 						else
 						{
-							$str = $str." e sei stato rilassato.";
+							$str[1] = "Sei stato mediamente calmo.";	
 							return $str;
 						}
 					}
 					else
 					{
-						$str = $str." e sei stato rilassato.";			//Se non ci sono diff_event
+						$str[1] = $str." e sei stato rilassato.";			//Se non ci sono diff_event
 						return $str;
 					}
 				}

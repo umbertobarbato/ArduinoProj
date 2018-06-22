@@ -25,8 +25,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="https://getbootstrap.com/favicon.ico">
-
-    <title>Dashboard Template for Bootstrap</title>
+    <title>freeDrive <?php echo " - ". $data; ?></title>
 
     <!-- Bootstrap core CSS -->
     <link href="./bootstrap.min.css" rel="stylesheet">
@@ -41,7 +40,7 @@
 
   <body>
     <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
-      <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="">Company name </a>
+      <a class="navbar-brand col-sm-3 col-md-2 mr-0" style="font-size:150%" href="">freeDrive</a>
     </nav>
 
     <div class="container-fluid">
@@ -58,7 +57,7 @@
          		</div>
          	</div>
           <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <h1 class="h2">Dashboard</h1>
+            <h1 class="h2">Sessione #<?php echo $sessione+1; ?> - <?php echo date('d/m/Y',strtotime($data)); ?></h1>
             <div class="btn-toolbar mb-2 mb-md-0">
               <div class="btn-group mr-2">
 				  <button class="btn btn-sm btn-outline-secondary" onclick="location.href = '<?php
@@ -118,13 +117,18 @@
             </div>
           </div>
 
-
+		  <?php
+		  if ($numSess<1) {
+			  echo "<h2>Nessuna sessione trovata per questa giornata.</h2>";
+		  }
+		  ?>
           <canvas class="my-4 w-100 chartjs-render-monitor" id="myChart" width="1004" height="423" style="display: block; width: 1004px; height: 423px;"></canvas>
 
 		  <!--Titolo tabella-->
           <h2>Sommario eventi</h2>
           <div class="table-responsive">
             <table class="table table-striped table-sm">
+			
               <thead>
                 <tr>
 					<th style="width:15%">Ora</th>
@@ -132,11 +136,20 @@
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td style="width:15%">1,001</td>
-                  <td>Lorem</td>
-
-                </tr>
+			  
+				<?php
+				for($i = 0;$i<$numSess;$i++)
+				{
+					$tmp = RiepilogoSessione(str_replace("/","",$data),$i);
+					echo "<tr>";
+					echo "<td style=\"width:15%\">". $tmp[0] ."</td>";
+					echo "<td>" . $tmp[1] . "</td>";
+					echo "</tr>";
+					
+				}
+				?>
+                
+                
 
                 <!--Inserire codice php per la generazione della tabella -->
               </tbody>
@@ -187,9 +200,27 @@
             yAxes: [{
               ticks: {
                 beginAtZero: false
+              },
+			  scaleLabel: {
+				display: true,
+				labelString: 'GSR Value'
+				}
+            }],
+			xAxes: [{
+			gridLines: {
+				display: false
+			},
+			scaleLabel: {
+				display: true,
+				labelString: 'Time'
+				},
+            ticks: {
+                autoSkip: false,
+				stepSize: 1
               }
             }]
           },
+		 
           legend: {
             display: false,
           }
